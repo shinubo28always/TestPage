@@ -237,30 +237,30 @@
   }
 
   // ✅ Countdown shuru hobe page fully load howar por
-  window.onload = function () {
-    const timer = document.getElementById('timer'); // ekhane nichi
+window.onload = function() {
+  const popup = document.getElementById("popup-overlay");
+  const timer = document.getElementById("timer");
+  let countdown = 7;
+
+  // Countdown update
+  timer.textContent = countdown;
+  const interval = setInterval(() => {
+    countdown--;
     timer.textContent = countdown;
+    if (countdown <= 0) {
+      clearInterval(interval);
+      // redirect if needed
+    }
+  }, 1000);
 
-    const interval = setInterval(() => {
-      countdown--;
-      timer.textContent = countdown;
-      if (countdown <= 0) {
-        clearInterval(interval);
-        if (redirectTo) window.location.href = redirectTo;
-      }
-    }, 1000);
+  // Popup hide after 4 sec automatically
+  setTimeout(() => {
+    popup.classList.add("hidden");
+  }, 4000);
 
-    // ✅ Popup system
-const popup = document.getElementById("popup-overlay");
-
-// Hide popup after 7 seconds automatically
-setTimeout(() => {
-  popup.classList.add("hidden");
-}, 4000);
-
-// Hide popup if user clicks anywhere
-document.addEventListener("click", () => {
-  popup.classList.add("hidden");
-});
-  };
+  // Popup hide on click anywhere
+  document.addEventListener("click", () => {
+    popup.classList.add("hidden");
+  });
+};
  </script>
