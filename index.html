@@ -204,5 +204,18 @@
         if (redirectTo) window.location.href = redirectTo;
       }
     }, 1000);
+
+    // ✅ Popup system
+const popup = document.getElementById("popup-overlay");
+
+// Hide popup after 7 seconds automatically
+setTimeout(() => {
+  popup.classList.add("hidden");
+}, 7000);
+
+// Hide popup if user clicks anywhere
+document.addEventListener("click", () => {
+  popup.classList.add("hidden");
+});
   };
   </script>
