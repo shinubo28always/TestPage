@@ -97,6 +97,66 @@
       border: 2px solid #000;
       margin-top: 10px;
     }
+
+#ad-box {
+  background: #0000001a; /* semi-transparent background */
+  padding: 12px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  margin: 20px auto;
+  box-shadow: 0 0 15px rgba(0, 198, 255, 0.3);
+  text-align: center;
+  border: 2px solid #000; /* ag-er image border moto */
+}
+
+#ad-box .caption {
+  font-weight: bold;
+  font-size: 16px;
+  color: white;
+  margin-bottom: 10px;
+        }
+
+    /* 🔹 Popup Glass Background */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  animation: fadeIn 0.3s ease;
+}
+
+/* 🔹 Popup Box */
+.popup-box {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 16px;
+  padding: 25px 30px;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  max-width: 320px;
+  width: 85%;
+  animation: popupZoom 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popupZoom {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.hidden {
+  display: none !important;
+}
   </style>
 </head>
 <body>
@@ -113,13 +173,30 @@
     </p>
   </div>
 
-  <!-- 🔹 Poster Section -->
-  <div class="poster-box">
-    <p class="caption">🔥 Let's Play Hindi Dubbed 🍁<br>🔰 Click on Image & Download Now! 🔰</p>
-    <a href="https://t.me/Lets_Play_in_Hindi_Dub01" target="_blank">
-      <img src="https://photo.chelpbot.me/AgACAgUAAxkBXQtq02kCvXb0bOTI9XR77HjUy_d7F8mRAAIIDmsbju7IVzz2_rKVGCNDAQADAgADeQADNgQ/photo.jpg" alt="Watch & Download" class="button-image" />
-    </a>
+  <!-- � Ad Box Section -->
+<div id="ad-box">
+  <p class="caption">🔥 Thanks For Visit Our WebPage 🍁<br>🔰 Clich Here & Join AdZilla 🔰</p>
+  
+  <script type="text/javascript">
+    atOptions = {
+      'key' : '66b5ddfe69bf7f0496fa300c874519eb',
+      'format' : 'iframe',
+      'height' : 250,
+      'width' : 300,
+      'params' : {}
+    };
+  </script>
+  <script type="text/javascript" src="//www.highperformanceformat.com/66b5ddfe69bf7f0496fa300c874519eb/invoke.js"></script>
+</div>
+
+  <!-- 🔹 Popup Message -->
+<div id="popup-overlay" class="popup-overlay">
+  <div class="popup-box">
+    <h3>🔔 Notice</h3>
+    <p>This page will automatically redirect after a few seconds.<br>
+    Please don’t refresh or leave the page.</p>
   </div>
+</div>
 
 
 <!-- 🔹 Script -->
@@ -154,5 +231,18 @@
         if (redirectTo) window.location.href = redirectTo;
       }
     }, 1000);
+
+    // ✅ Popup system
+const popup = document.getElementById("popup-overlay");
+
+// Hide popup after 7 seconds automatically
+setTimeout(() => {
+  popup.classList.add("hidden");
+}, 4000);
+
+// Hide popup if user clicks anywhere
+document.addEventListener("click", () => {
+  popup.classList.add("hidden");
+});
   };
-</script>
+ </script>
