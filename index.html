@@ -256,11 +256,13 @@ window.onload = function() {
   const interval = setInterval(() => {
     countdown--;
     timer.textContent = countdown;
-    if (countdown <= 0) {
-      clearInterval(interval);
-      // redirect if needed
+  if (countdown <= 0) {
+    clearInterval(interval);
+    if (redirectTo) {
+      window.location.href = redirectTo;
     }
-  }, 1000);
+  }
+}, 1000);
 
   // Popup hide after 4 sec automatically
   setTimeout(() => {
