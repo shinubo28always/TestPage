@@ -228,22 +228,25 @@
 
 <!-- 🔹 Script -->
  <script>
-  function getQueryParam(param) {
+function getQueryParam(param) {
     const params = new URLSearchParams(window.location.search);
     return params.get(param);
-  }
+}
 
-  let countdown = 7;
-  let redirectTo = "";
+let countdown = 7;
+let redirectTo = "";
 
-  let urlParam = getQueryParam('url');
-  let startParam = getQueryParam('start');
+let urlParam = getQueryParam('url');
+let startParam = getQueryParam('start');
+let tgTokenParam = getQueryParam('TGToken'); // TGToken add
 
-  if (urlParam) {
+if (urlParam) {
     redirectTo = decodeURIComponent(urlParam.trim());
-  } else if (startParam) {
+} else if (startParam) {
     redirectTo = "https://t.me/AniReal_File_Store_Bot?start=" + encodeURIComponent(startParam.trim());
-  }
+} else if (tgTokenParam) {
+    redirectTo = "https://t.me/+" + encodeURIComponent(tgTokenParam.trim()); // private channel
+}
 
   // ✅ Countdown shuru hobe page fully load howar por
 window.onload = function() {
