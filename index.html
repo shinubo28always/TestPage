@@ -227,28 +227,54 @@
 
 
 <!-- 🔹 Script -->
- <script>
+<script>
+// Function to read query parameters
 function getQueryParam(param) {
-    const params = new URLSearchParams(window.location.search);
-    return params.get(param);
+  const params = new URLSearchParams(window.location.search);
+  return params.get(param);
+}
+
+// Function to decode Base64 (safe for URL)
+function decodeBase64(str) {
+  try {
+    return decodeURIComponent(escape(atob(str)));
+  } catch (e) {
+    return null;
+  }
 }
 
 let countdown = 7;
 let redirectTo = "";
 
+// Get parameters
 let urlParam = getQueryParam('url');
 let startParam = getQueryParam('start');
-let tgTokenParam = getQueryParam('TGToken'); // TGToken add
+let tgTokenParam = getQueryParam('TGToken');  // Private channel
+let tokenXParam = getQueryParam('TokenX');    // Public channel
+let encodedParam = getQueryParam('code');     // Encrypted/encoded link
 
+// Priority-based redirect
 if (urlParam) {
-    redirectTo = decodeURIComponent(urlParam.trim());
+  redirectTo = decodeURIComponent(urlParam.trim());
+
 } else if (startParam) {
-    redirectTo = "https://t.me/AniReal_File_Store_Bot?start=" + encodeURIComponent(startParam.trim());
+  redirectTo = "https://t.me/AniReal_File_Store_Bot?start=" + encodeURIComponent(startParam.trim());
+
 } else if (tgTokenParam) {
-    redirectTo = "https://t.me/+" + encodeURIComponent(tgTokenParam.trim()); // private channel
+  redirectTo = "https://t.me/+" + encodeURIComponent(tgTokenParam.trim());  // Private channel
+
+} else if (tokenXParam) {
+  redirectTo = "https://t.me/" + encodeURIComponent(tokenXParam.trim());    // Public channel
+
+} else if (encodedParam) {
+  // Example: ?code=aHR0cHM6Ly90Lm1lL0FuaVJlYWxfQW5pbWVfWm9uZQ==
+  let decoded = decodeBase64(encodedParam.trim());
+  if (decoded && decoded.startsWith("http")) {
+    redirectTo = decoded;
+  }
 }
 
-  // ✅ Countdown shuru hobe page fully load howar por
+// ✅ Countdown shuru hobe page fully load howar por
 window.onload = function() {
   const popup = document.getElementById("popup-overlay");
   const timer = document.getElementById("timer");
@@ -259,13 +285,13 @@ window.onload = function() {
   const interval = setInterval(() => {
     countdown--;
     timer.textContent = countdown;
-  if (countdown <= 0) {
-    clearInterval(interval);
-    if (redirectTo) {
-      window.location.href = redirectTo;
+    if (countdown <= 0) {
+      clearInterval(interval);
+      if (redirectTo) {
+        window.location.href = redirectTo;
+      }
     }
-  }
-}, 1000);
+  }, 1000);
 
   // Popup hide after 4 sec automatically
   setTimeout(() => {
@@ -277,6 +303,6 @@ window.onload = function() {
     popup.classList.add("hidden");
   });
 };
- </script>
+</script>
 </body>
 </html>
