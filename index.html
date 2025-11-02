@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Redirect Page Test</title>
+  <title>AniReal - Redirect Pro😎</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -227,54 +227,88 @@
 
 
 <!-- 🔹 Script -->
-<script>
-// Function to read query parameters
-function getQueryParam(param) {
-  const params = new URLSearchParams(window.location.search);
-  return params.get(param);
+ <script>
+// --- Replace your existing param / redirect logic with this block ---
+
+// safely get param
+function getQueryParam(name) {
+  return new URLSearchParams(window.location.search).get(name);
 }
 
-// Function to decode Base64 (safe for URL)
-function decodeBase64(str) {
+// try decode Base64 (handles normal and URL-safe base64, with padding)
+function tryDecodeBase64(s) {
+  if (!s) return null;
   try {
-    return decodeURIComponent(escape(atob(str)));
+    // replace URL-safe chars
+    let str = s.replace(/-/g, '+').replace(/_/g, '/');
+    // add padding
+    while (str.length % 4) str += '=';
+    const decoded = atob(str);
+    // try to decodeURIComponent if it was encoded
+    try { return decodeURIComponent(escape(decoded)); } catch (e) { return decoded; }
   } catch (e) {
     return null;
   }
 }
 
-let countdown = 7;
+// choose candidate: prefer decoded if it looks like a useful value, otherwise raw
+function bestValue(raw) {
+  if (!raw) return null;
+  const dec = tryDecodeBase64(raw);
+  // if decoded looks like a URL or token (simple heuristic), use it
+  if (dec && (dec.startsWith('http') || dec.startsWith('tg://') || dec.indexOf('t.me') !== -1 || dec.match(/^[A-Za-z0-9_\-+@]+$/))) {
+    return dec;
+  }
+  // otherwise return raw as-is
+  return raw;
+}
+
+// prepare redirect target from param values
 let redirectTo = "";
 
-// Get parameters
-let urlParam = getQueryParam('url');
-let startParam = getQueryParam('start');
-let tgTokenParam = getQueryParam('TGToken');  // Private channel
-let tokenXParam = getQueryParam('TokenX');    // Public channel
-let encodedParam = getQueryParam('code');     // Encrypted/encoded link
+// url=  (can be plain url or base64 encoded url)
+const rawUrl = getQueryParam('url');
+const urlVal = bestValue(rawUrl);
+if (urlVal && (urlVal.startsWith('http') || urlVal.startsWith('tg://') || urlVal.startsWith('https:'))) {
+  redirectTo = urlVal;
+}
 
-// Priority-based redirect
-if (urlParam) {
-  redirectTo = decodeURIComponent(urlParam.trim());
-
-} else if (startParam) {
-  redirectTo = "https://t.me/AniReal_File_Store_Bot?start=" + encodeURIComponent(startParam.trim());
-
-} else if (tgTokenParam) {
-  redirectTo = "https://t.me/+" + encodeURIComponent(tgTokenParam.trim());  // Private channel
-
-} else if (tokenXParam) {
-  redirectTo = "https://t.me/" + encodeURIComponent(tokenXParam.trim());    // Public channel
-
-} else if (encodedParam) {
-  // Example: ?code=aHR0cHM6Ly90Lm1lL0FuaVJlYWxfQW5pbWVfWm9uZQ==
-  let decoded = decodeBase64(encodedParam.trim());
-  if (decoded && decoded.startsWith("http")) {
-    redirectTo = decoded;
+// start=  (bot start param; either raw token or encoded)
+if (!redirectTo) {
+  const rawStart = getQueryParam('start');
+  const startVal = bestValue(rawStart);
+  if (startVal) {
+    redirectTo = "https://t.me/AniReal_File_Store_Bot?start=" + encodeURIComponent(startVal.trim());
   }
 }
 
-// ✅ Countdown shuru hobe page fully load howar por
+// TGToken=  (private channel token; expected like MsRP1aeKfT5hNmVl or base64 of that)
+// we will produce: https://t.me/+<token>   (plus sign before token)
+if (!redirectTo) {
+  const rawTG = getQueryParam('TGToken');
+  const tgVal = bestValue(rawTG);
+  if (tgVal) {
+    // strip leading + or / if any, keep core token
+    const clean = tgVal.trim().replace(/^[+\/]+/, '');
+    redirectTo = "https://t.me/+" + encodeURIComponent(clean);
+  }
+}
+
+// TokenX=  (public channel username without @, or encoded)
+if (!redirectTo) {
+  const rawX = getQueryParam('TokenX');
+  const xVal = bestValue(rawX);
+  if (xVal) {
+    // remove leading @ if present
+    const clean = xVal.trim().replace(/^@+/, '');
+    redirectTo = "https://t.me/" + encodeURIComponent(clean);
+  }
+}
+
+// If redirectTo is now set, window.onload logic (countdown) will redirect when timer ends.
+// Make sure your window.onload uses the same `redirectTo` variable.
+
+  // ✅ Countdown shuru hobe page fully load howar por
 window.onload = function() {
   const popup = document.getElementById("popup-overlay");
   const timer = document.getElementById("timer");
@@ -285,13 +319,13 @@ window.onload = function() {
   const interval = setInterval(() => {
     countdown--;
     timer.textContent = countdown;
-    if (countdown <= 0) {
-      clearInterval(interval);
-      if (redirectTo) {
-        window.location.href = redirectTo;
-      }
+  if (countdown <= 0) {
+    clearInterval(interval);
+    if (redirectTo) {
+      window.location.href = redirectTo;
     }
-  }, 1000);
+  }
+}, 1000);
 
   // Popup hide after 4 sec automatically
   setTimeout(() => {
@@ -303,6 +337,6 @@ window.onload = function() {
     popup.classList.add("hidden");
   });
 };
-</script>
+ </script>
 </body>
 </html>
