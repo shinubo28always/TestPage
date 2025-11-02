@@ -267,7 +267,7 @@ function bestValue(raw) {
 let redirectTo = "";
 
 // url=  (can be plain url or base64 encoded url)
-const rawUrl = getQueryParam('Url');
+const rawUrl = getQueryParam('url');
 const urlVal = bestValue(rawUrl);
 if (urlVal && (urlVal.startsWith('http') || urlVal.startsWith('tg://') || urlVal.startsWith('https:'))) {
   redirectTo = urlVal;
