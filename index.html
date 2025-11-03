@@ -1,342 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AniReal - Redirect Pro😎</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to right, #2c5364, #203a43, #0f2027);
-      color: white;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-      min-height: 100vh;
-    }
-
-    .top-banner {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    .glass-box {
-  background: linear-gradient(270deg, #00c8ff, #92fe9d, #00c8ff, #92fe9d),
-              rgba(0, 0, 0, 0.3); /* Dark overlay */
-  background-blend-mode: multiply; /* Blend gradient with black overlay */
-  background-size: 800% 800%;
-  animation: gradientShift 15s ease infinite;
-
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: 16px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-
-  padding: 30px;
-  color: white;
-  max-width: 600px;
-  margin: 40px auto;
-      /* ✅ Add these */
-  position: relative; /* needed for z-index */
-  z-index: 5000;     /* native navbar er upor thakbe */
-    }
-
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    .circle-timer {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      background-color: rgba(0, 0, 0, 0.3);
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 36px;
-      font-weight: bold;
-      margin: 20px auto;
-      user-select: none;
-    }
-
-    .dot-animate::after {
-      content: '';
-      display: inline-block;
-      width: 1em;
-      animation: dots 1.5s steps(3, end) infinite;
-    }
-
-    @keyframes dots {
-      0% { content: ''; }
-      33% { content: '.'; }
-      66% { content: '..'; }
-      100% { content: '...'; }
-    }
-
-    .poster-box {
-      background: #transpared;
-      padding: 12px;
-      border-radius: 12px;
-      width: 90%;
-      max-width: 500px;
-      margin: 20px auto;
-      box-shadow: 0 0 15px rgba(0, 198, 255, 0.3);
-    }
-
-    .caption {
-      font-weight: bold;
-      font-size: 16px;
-      color: white;
-    }
-
-    .button-image {
-      width: 100%;
-      border-radius: 10px;
-      border: 2px solid #000;
-      margin-top: 10px;
-    }
-
-#ad-box {
-  background: #0000001a; /* semi-transparent background */
-  padding: 12px;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 500px;
-  margin: 20px auto;
-  box-shadow: 0 0 15px rgba(0, 198, 255, 0.3);
-  text-align: center;
-  border: 2px solid #000; /* ag-er image border moto */
-}
-
-#ad-box .caption {
-  font-weight: bold;
-  font-size: 16px;
-  color: white;
-  margin-bottom: 10px;
-        }
-
-    /* Ad iframe frame */
-#ad-box iframe {
-  width: 100%;
-  height: 250px;
-  border: none;
-  border-radius: 12px;
-}
-
-    /* 🔹 Native Navbar Style */
-#container-75abdbb0d449811c569ac3f133e5bdf6 {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  max-height: 60px;  /* navbar height control */
-  z-index: 9999;     /* countdown box er niche thakbe */
-    }
-    
-
-/* Popup overlay (full screen blur) */
-#popup-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(6px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10000; /* sobar upor */
-  animation: fadeIn 0.3s ease;
-}
-
-/* Popup box */
-.popup-box {
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.25);
-  border-radius: 16px;
-  padding: 25px 30px;
-  text-align: center;
+<meta charset="UTF-8">
+<title>Video Stream</title>
+<style>
+body {
+  background: #0f0f0f;
   color: #fff;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-  max-width: 320px;
-  width: 85%;
-    }
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  text-align: center;
+  font-family: Arial, sans-serif;
+  padding-top: 40px;
 }
-
-@keyframes popupZoom {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+video {
+  width: 80%;
+  max-width: 720px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(255,255,255,0.2);
 }
-
-.hidden {
-  display: none !important;
+a {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: #ff4747;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
 }
-  </style>
+a:hover { background: #ff2e63; }
+</style>
 </head>
 <body>
 
-  <!-- 🔹 Banner -->
-  <img src="https://photo.chelpbot.me/AgACAgUAAxkBVfy46WiS77LTAvf6YG_2lFG2BvLYye6PAAIwxjEbKg-ZVHtyDnfsWI1NAQADAgADdwADNgQ/photo.jpg" alt="AniReal Banner" class="top-banner" />
+<h2>🎬 Now Streaming</h2>
+<video id="player" controls></video>
+<br>
+<a id="download" href="" download>📥 Download</a>
 
-  <!-- 🔹 Countdown Box with Glass Effect -->
-  <div class="glass-box">
-    <h2>YOUR LINK IS ALMOST READY.</h2>
-    <div id="timer" class="circle-timer">3</div>
-    <p style="font-weight: bold; color: #d9d9d9; font-size: 20px;">
-      🔗 Redirecting Your Link<span class="dot-animate"></span>
-    </p>
-  </div>
+<script>
+// Get VToken from URL
+const urlParams = new URLSearchParams(window.location.search);
+const videoLink = urlParams.get('VToken');
 
-  <!-- � Ad Box Section -->
-<div id="ad-box">
-  <p class="caption">🔥 Thanks For Visit Our WebPage 🍁<br>🔰 Clich Here & Join AdZilla 🔰</p>
-  
-  <script type="text/javascript">
-    atOptions = {
-      'key' : '66b5ddfe69bf7f0496fa300c874519eb',
-      'format' : 'iframe',
-      'height' : 250,
-      'width' : 300,
-      'params' : {}
-    };
-  </script>
-  <script type="text/javascript" src="//www.highperformanceformat.com/66b5ddfe69bf7f0496fa300c874519eb/invoke.js"></script>
-</div>
+if(videoLink){
+  const video = document.getElementById('player');
+  video.src = videoLink;
 
-  <script type='text/javascript' src='//pl27956206.effectivegatecpm.com/91/33/32/913332be291373159c4db35c3a49fb5d.js'></script>
-
-  <!-- 🔹 Native Navbar -->
-<script async="async" data-cfasync="false" src="//pl27955699.effectivegatecpm.com/75abdbb0d449811c569ac3f133e5bdf6/invoke.js"></script>
-<div id="container-75abdbb0d449811c569ac3f133e5bdf6"></div>
-
-  <!-- 🔹 Popup Message -->
-<div id="popup-overlay" class="popup-overlay">
-  <div class="popup-box">
-    <h3>🔔 Notice</h3>
-    <p>This page will automatically redirect after a few seconds.<br>
-    Please don’t refresh or leave the page.</p>
-  </div>
-</div>
-
-
-<!-- 🔹 Script -->
- <script>
-// --- Replace your existing param / redirect logic with this block ---
-
-// safely get param
-function getQueryParam(name) {
-  return new URLSearchParams(window.location.search).get(name);
+  const downloadBtn = document.getElementById('download');
+  downloadBtn.href = videoLink;
+} else {
+  document.body.innerHTML = "<h3>No video link found!</h3>";
 }
+</script>
 
-// try decode Base64 (handles normal and URL-safe base64, with padding)
-function tryDecodeBase64(s) {
-  if (!s) return null;
-  try {
-    // replace URL-safe chars
-    let str = s.replace(/-/g, '+').replace(/_/g, '/');
-    // add padding
-    while (str.length % 4) str += '=';
-    const decoded = atob(str);
-    // try to decodeURIComponent if it was encoded
-    try { return decodeURIComponent(escape(decoded)); } catch (e) { return decoded; }
-  } catch (e) {
-    return null;
-  }
-}
-
-// choose candidate: prefer decoded if it looks like a useful value, otherwise raw
-function bestValue(raw) {
-  if (!raw) return null;
-  const dec = tryDecodeBase64(raw);
-  // if decoded looks like a URL or token (simple heuristic), use it
-  if (dec && (dec.startsWith('http') || dec.startsWith('tg://') || dec.indexOf('t.me') !== -1 || dec.match(/^[A-Za-z0-9_\-+@]+$/))) {
-    return dec;
-  }
-  // otherwise return raw as-is
-  return raw;
-}
-
-// prepare redirect target from param values
-let redirectTo = "";
-
-// url=  (can be plain url or base64 encoded url)
-const rawUrl = getQueryParam('url');
-const urlVal = bestValue(rawUrl);
-if (urlVal && (urlVal.startsWith('http') || urlVal.startsWith('tg://') || urlVal.startsWith('https:'))) {
-  redirectTo = urlVal;
-}
-
-// start=  (bot start param; either raw token or encoded)
-if (!redirectTo) {
-  const rawStart = getQueryParam('start');
-  const startVal = bestValue(rawStart);
-  if (startVal) {
-    redirectTo = "https://t.me/AniReal_File_Store_Bot?start=" + encodeURIComponent(startVal.trim());
-  }
-}
-
-// TGToken=  (private channel token; expected like MsRP1aeKfT5hNmVl or base64 of that)
-// we will produce: https://t.me/+<token>   (plus sign before token)
-if (!redirectTo) {
-  const rawTG = getQueryParam('TGToken');
-  const tgVal = bestValue(rawTG);
-  if (tgVal) {
-    // strip leading + or / if any, keep core token
-    const clean = tgVal.trim().replace(/^[+\/]+/, '');
-    redirectTo = "https://t.me/+" + encodeURIComponent(clean);
-  }
-}
-
-// TokenX=  (public channel username without @, or encoded)
-if (!redirectTo) {
-  const rawX = getQueryParam('TokenX');
-  const xVal = bestValue(rawX);
-  if (xVal) {
-    // remove leading @ if present
-    const clean = xVal.trim().replace(/^@+/, '');
-    redirectTo = "https://t.me/" + encodeURIComponent(clean);
-  }
-}
-
-// If redirectTo is now set, window.onload logic (countdown) will redirect when timer ends.
-// Make sure your window.onload uses the same `redirectTo` variable.
-
-  // ✅ Countdown shuru hobe page fully load howar por
-window.onload = function() {
-  const popup = document.getElementById("popup-overlay");
-  const timer = document.getElementById("timer");
-  let countdown = 7;
-
-  // Countdown update
-  timer.textContent = countdown;
-  const interval = setInterval(() => {
-    countdown--;
-    timer.textContent = countdown;
-  if (countdown <= 0) {
-    clearInterval(interval);
-    if (redirectTo) {
-      window.location.href = redirectTo;
-    }
-  }
-}, 1000);
-
-  // Popup hide after 4 sec automatically
-  setTimeout(() => {
-    popup.classList.add("hidden");
-  }, 4000);
-
-  // Popup hide on click anywhere
-  document.addEventListener("click", () => {
-    popup.classList.add("hidden");
-  });
-};
- </script>
 </body>
 </html>
