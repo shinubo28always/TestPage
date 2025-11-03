@@ -129,46 +129,44 @@
 <body>
 
 <div class="video-info">
-  <h2>[@AniReal_Anime_Zone] S01E05 The Fragrant Flower 480.mp4</h2>
-  <span>Duration: 24:02</span>
-  <span>Resolution: 1280x720</span>
+  <h2 id="videoTitle">Loading title...</h2>
+  <span id="videoDuration">Duration: --:--</span>
+  <span id="videoResolution">Resolution: --x--</span>
 </div>
 
-<div class="video-container">
-  <video id="player" poster="https://graph.org/file/8bc7807df3fd5a1e3c46a-36febdfe5d6f04bf69.jpg" controls>
-    Your browser does not support HTML5 video.
-  </video>
-</div>
-
-<div class="btn-container">
-  <a id="streamBtn" class="btn" href="#" target="_blank">🔗 Stream</a>
-  <a id="downloadBtn" class="btn" href="#" download>📥 Download</a>
-  <button id="copyBtn" class="btn">📋 Copy Link</button>
-</div>
+<video id="player" controls></video>
 
 <script>
 const urlParams = new URLSearchParams(window.location.search);
 const videoLink = urlParams.get('VToken');
 
 const player = document.getElementById('player');
-const downloadBtn = document.getElementById('downloadBtn');
-const streamBtn = document.getElementById('streamBtn');
-const copyBtn = document.getElementById('copyBtn');
+const titleEl = document.getElementById('videoTitle');
+const durationEl = document.getElementById('videoDuration');
+const resolutionEl = document.getElementById('videoResolution');
 
 if(videoLink){
   player.src = videoLink;
-  downloadBtn.href = videoLink;
-  streamBtn.href = videoLink;
 
-  copyBtn.addEventListener('click', ()=>{
-    navigator.clipboard.writeText(videoLink).then(()=>{
-      alert('Link copied to clipboard!');
-    });
+  // Set title from link or filename
+  let fileName = videoLink.split('/').pop();
+  titleEl.textContent = fileName;
+
+  // When metadata loaded, get duration & resolution
+  player.addEventListener('loadedmetadata', ()=>{
+    let duration = player.duration; // in seconds
+    let minutes = Math.floor(duration/60);
+    let seconds = Math.floor(duration % 60);
+    if(seconds < 10) seconds = '0' + seconds;
+    durationEl.textContent = `Duration: ${minutes}:${seconds}`;
+
+    let width = player.videoWidth;
+    let height = player.videoHeight;
+    resolutionEl.textContent = `Resolution: ${width}x${height}`;
   });
 }else{
   document.body.innerHTML = "<h3 style='color:white;text-align:center;'>No video link found!</h3>";
 }
 </script>
-
 </body>
 </html>
