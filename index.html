@@ -141,7 +141,7 @@ footer {
 <body>
 
 <div class="video-info">
-  <h2 id="videoTitle">Loading Video...</h2>
+  <h2 id="videoTitle" style="color:#cca300; font-weight:bold;">Streaming File Details</h2>
   <span id="videoDuration">Duration: --</span>
   <span id="videoResolution">Resolution: --</span>
 </div>
@@ -164,23 +164,12 @@ footer {
 
 <script>
 const urlParams = new URLSearchParams(window.location.search);
-let token = urlParams.get('VToken');
-
-let videoLink = token;
-let customTitle = "";
-
-// Check if token contains &&
-if(token && token.includes('&&')){
-  const parts = token.split('&&');
-  videoLink = parts[0]; // video link before &&
-  customTitle = decodeURIComponent(parts[1].replace(/\+/g,' ')); // title after &&
-}
+const videoLink = urlParams.get('VToken');
 
 const player = document.getElementById('player');
 const downloadBtn = document.getElementById('downloadBtn');
 const streamBtn = document.getElementById('streamBtn');
 const copyBtn = document.getElementById('copyBtn');
-const titleElem = document.getElementById('videoTitle');
 const durationElem = document.getElementById('videoDuration');
 const resolutionElem = document.getElementById('videoResolution');
 
@@ -199,8 +188,8 @@ if(videoLink){
     });
   });
 
-  // Title: custom if provided
-  titleElem.textContent = customTitle || "Anime Video";
+  // Title fixed, no custom
+  // Already set in HTML: Streaming File Details
 
   // Load video metadata for duration & resolution
   player.addEventListener('loadedmetadata', () => {
