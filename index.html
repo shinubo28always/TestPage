@@ -163,9 +163,9 @@ footer {
 </footer>
 
 <script>
-// Get VToken from URL
 const urlParams = new URLSearchParams(window.location.search);
 const videoLink = urlParams.get('VToken');
+const customTitle = urlParams.get('title') || "";
 
 const player = document.getElementById('player');
 const downloadBtn = document.getElementById('downloadBtn');
@@ -189,12 +189,16 @@ if(videoLink){
     });
   });
 
-  // Extract filename for title
-  try {
-    const urlParts = videoLink.split('/');
-    const filename = decodeURIComponent(urlParts[urlParts.length-1]);
-    titleElem.textContent = filename;
-  } catch(e){ titleElem.textContent = "Anime Video"; }
+  // Title: Custom if provided, else filename
+  if(customTitle){
+    titleElem.textContent = customTitle;
+  } else {
+    try {
+      const urlParts = videoLink.split('/');
+      const filename = decodeURIComponent(urlParts[urlParts.length-1]);
+      titleElem.textContent = filename;
+    } catch(e){ titleElem.textContent = "Anime Video"; }
+  }
 
   // Load video metadata for duration & resolution
   player.addEventListener('loadedmetadata', () => {
