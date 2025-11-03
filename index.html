@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>🎬 Stream Site</title>
+<title>🎬 Anime Stream</title>
 <style>
+  /* Body & font */
   body {
     background: linear-gradient(135deg, #1e1e2f, #0f0f1f);
     color: #fff;
@@ -11,17 +12,23 @@
     font-family: 'Arial', sans-serif;
     padding: 40px 20px;
   }
+
+  /* Header */
   h1 {
     font-size: 2.5rem;
     text-shadow: 2px 2px 8px #ff2e63;
     margin-bottom: 20px;
   }
+
+  /* Video player */
   video {
-    width: 80%;
-    max-width: 800px;
+    width: 100%;
+    max-width: 900px;  /* Desktop max width */
     border-radius: 12px;
     box-shadow: 0 0 30px rgba(255, 46, 99, 0.6);
   }
+
+  /* Download button */
   a {
     display: inline-block;
     margin-top: 20px;
@@ -36,6 +43,30 @@
   a:hover {
     background: #ff4777;
     transform: scale(1.05);
+  }
+
+  /* Responsive for tablets */
+  @media (max-width: 1024px) {
+    h1 {
+      font-size: 2rem;
+    }
+    video {
+      max-width: 700px;
+    }
+  }
+
+  /* Responsive for mobiles */
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 1.5rem;
+    }
+    video {
+      max-width: 100%;  /* full width on mobile */
+    }
+    a {
+      padding: 10px 20px;
+      font-size: 0.9rem;
+    }
   }
 </style>
 </head>
