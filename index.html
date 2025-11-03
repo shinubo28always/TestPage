@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>🎬 Anime Stream</title>
 <style>
-  /* Body & font */
   body {
     background: linear-gradient(135deg, #1e1e2f, #0f0f1f);
     color: #fff;
@@ -13,7 +12,6 @@
     padding: 40px 20px;
   }
 
-  /* Header */
   h1 {
     font-size: 2.5rem;
     text-shadow: 2px 2px 8px #ff2e63;
@@ -24,17 +22,28 @@
   video {
     width: 100%;
     max-width: 900px;
-    height: 500px; /* desktop default height */
-    object-fit: cover; /* crop & zoom effect */
+    height: 500px;
+    object-fit: cover;
     border-radius: 12px;
     box-shadow: 0 0 30px rgba(255, 46, 99, 0.6);
+    cursor: pointer;
   }
 
-  /* Download & control buttons */
+  /* Button container */
+  .controls {
+    margin-top: 10px;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    transform: translateY(20px);
+  }
+  .controls.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
   .btn {
     display: inline-block;
-    margin-top: 15px;
-    margin-right: 10px;
+    margin: 5px 5px;
     padding: 12px 25px;
     background: #ff2e63;
     color: #fff;
@@ -49,17 +58,15 @@
     transform: scale(1.05);
   }
 
-  /* Responsive for tablets */
   @media (max-width:1024px) {
     h1 { font-size: 2rem; }
     video { max-width: 700px; height: 400px; }
   }
 
-  /* Responsive for mobiles */
   @media (max-width:768px) {
     h1 { font-size: 1.5rem; }
     video { max-width: 100%; height: 300px; }
-    .btn { padding: 10px 20px; font-size: 0.9rem; margin-top:10px; }
+    .btn { padding: 10px 20px; font-size: 0.9rem; }
   }
 </style>
 </head>
@@ -70,29 +77,34 @@
 <video id="player" controls poster="https://graph.org/file/8bc7807df3fd5a1e3c46a-36febdfe5d6f04bf69.jpg">
   Your browser does not support HTML5 video.
 </video>
-<br>
 
-<!-- Buttons -->
-<a id="download" class="btn" href="" download>📥 Download</a>
-<button class="btn" onclick="document.getElementById('player').requestFullscreen()">🖥 Fullscreen</button>
-<button class="btn" onclick="player.playbackRate=0.5">0.5x</button>
-<button class="btn" onclick="player.playbackRate=1">1x</button>
-<button class="btn" onclick="player.playbackRate=1.5">1.5x</button>
-<button class="btn" onclick="player.playbackRate=2">2x</button>
+<div id="buttons" class="controls">
+  <a id="download" class="btn" href="" download>📥 Download</a>
+  <button class="btn" onclick="player.requestFullscreen()">🖥 Fullscreen</button>
+  <button class="btn" onclick="player.playbackRate=0.5">0.5x</button>
+  <button class="btn" onclick="player.playbackRate=1">1x</button>
+  <button class="btn" onclick="player.playbackRate=1.5">1.5x</button>
+  <button class="btn" onclick="player.playbackRate=2">2x</button>
+</div>
 
 <script>
 const urlParams = new URLSearchParams(window.location.search);
 const videoLink = urlParams.get('VToken');
 
-if(videoLink){
-  const video = document.getElementById('player');
-  video.src = videoLink;
+const video = document.getElementById('player');
+const buttons = document.getElementById('buttons');
 
-  const downloadBtn = document.getElementById('download');
-  downloadBtn.href = videoLink;
+if(videoLink){
+  video.src = videoLink;
+  document.getElementById('download').href = videoLink;
 } else {
   document.body.innerHTML = "<h3>No video link found!</h3>";
 }
+
+// Toggle button visibility on click
+video.addEventListener('click', () => {
+  buttons.classList.toggle('show');
+});
 </script>
 
 </body>
