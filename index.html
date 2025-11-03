@@ -32,7 +32,8 @@ body {
 
 .video-info h2 {
   font-size:1.7rem;
-  color:#ffdd59;
+  color:#cca300;
+  font-weight:bold;
   text-shadow: 1px 1px 6px #000;
   margin-bottom:10px;
   word-break: break-word;
@@ -100,29 +101,14 @@ video:hover {
   box-shadow: 0 6px 18px rgba(0,0,0,0.5);
 }
 
-.btn#streamBtn {
-  background: linear-gradient(45deg, #ff6a00, #ee0979);
-}
-.btn#streamBtn:hover {
-  background: linear-gradient(45deg, #ee0979, #ff6a00);
-  transform: translateY(-3px) scale(1.02);
-}
+.btn#streamBtn { background: linear-gradient(45deg, #ff6a00, #ee0979); }
+.btn#streamBtn:hover { background: linear-gradient(45deg, #ee0979, #ff6a00); transform: translateY(-3px) scale(1.02); }
 
-.btn#downloadBtn {
-  background: linear-gradient(135deg, #1dd1a1, #10ac84);
-}
-.btn#downloadBtn:hover {
-  background: linear-gradient(135deg, #10ac84, #1dd1a1);
-  transform: translateY(-3px) scale(1.02);
-}
+.btn#downloadBtn { background: linear-gradient(135deg, #1dd1a1, #10ac84); }
+.btn#downloadBtn:hover { background: linear-gradient(135deg, #10ac84, #1dd1a1); transform: translateY(-3px) scale(1.02); }
 
-.btn#copyBtn {
-  background: linear-gradient(90deg, #5f27cd, #341f97);
-}
-.btn#copyBtn:hover {
-  background: linear-gradient(90deg, #341f97, #5f27cd);
-  transform: translateY(-3px) scale(1.02);
-}
+.btn#copyBtn { background: linear-gradient(90deg, #5f27cd, #341f97); }
+.btn#copyBtn:hover { background: linear-gradient(90deg, #341f97, #5f27cd); transform: translateY(-3px) scale(1.02); }
 
 footer {
   text-align:center;
@@ -141,15 +127,13 @@ footer {
 <body>
 
 <div class="video-info">
-  <h2 id="videoTitle" style="color:#cca300; font-weight:bold;">Streaming File Details</h2>
+  <h2>Streaming File Details</h2>
   <span id="videoDuration">Duration: --</span>
   <span id="videoResolution">Resolution: --</span>
 </div>
 
 <div class="video-container">
-  <video id="player" poster="https://graph.org/file/8bc7807df3fd5a1e3c46a-36febdfe5d6f04bf69.jpg" controls>
-    Your browser does not support HTML5 video.
-  </video>
+  <video id="player" controls preload="metadata"></video>
 </div>
 
 <div class="btn-container">
@@ -158,13 +142,13 @@ footer {
   <button id="copyBtn" class="btn">📋 Copy Link</button>
 </div>
 
-<footer>
-  © 2025 Anime VIP Stream
-</footer>
+<footer>© 2025 Anime VIP Stream</footer>
 
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script>
 const urlParams = new URLSearchParams(window.location.search);
 const videoLink = urlParams.get('VToken');
+const resolutionParam = urlParams.get('resolution'); // optional
 
 const player = document.getElementById('player');
 const downloadBtn = document.getElementById('downloadBtn');
@@ -174,38 +158,41 @@ const durationElem = document.getElementById('videoDuration');
 const resolutionElem = document.getElementById('videoResolution');
 
 if(videoLink){
-  // Set video src
-  player.src = videoLink;
+  // HLS streaming support
+  if(Hls.isSupported() && videoLink.endsWith(".m3u8")){
+    const hls = new Hls();
+    hls.loadSource(videoLink);
+    hls.attachMedia(player);
+    hls.on(Hls.Events.MANIFEST_PARSED, function() { player.play(); });
+  } else if(player.canPlayType('application/vnd.apple.mpegurl') && videoLink.endsWith(".m3u8")){
+    player.src = videoLink;
+    player.addEventListener('loadedmetadata', ()=>{ player.play(); });
+  } else {
+    player.src = videoLink; // fallback for mp4
+  }
 
   // Buttons
   downloadBtn.href = videoLink;
   streamBtn.href = videoLink;
 
-  // Copy Link button
   copyBtn.addEventListener('click', ()=>{
-    navigator.clipboard.writeText(videoLink).then(()=>{
-      alert('Link copied to clipboard!');
-    });
+    navigator.clipboard.writeText(videoLink).then(()=>{ alert('Link copied to clipboard!'); });
   });
 
-  // Title fixed, no custom
-  // Already set in HTML: Streaming File Details
-
-  // Load video metadata for duration & resolution
+  // Load metadata for duration
   player.addEventListener('loadedmetadata', () => {
-    // Duration
     const sec = Math.floor(player.duration);
     const min = Math.floor(sec / 60);
     const remainingSec = sec % 60;
     durationElem.textContent = `Duration: ${min}:${remainingSec.toString().padStart(2,'0')}`;
 
-    // Resolution
-    resolutionElem.textContent = `Resolution: ${player.videoWidth}x${player.videoHeight}`;
+    // Resolution: from URL param if provided
+    if(resolutionParam){
+      resolutionElem.textContent = `Resolution: ${resolutionParam}`;
+    } else {
+      resolutionElem.textContent = `Resolution: ${player.videoWidth}x${player.videoHeight}`;
+    }
   });
-
-  // Attempt autoplay
-  player.load();
-  player.play().catch(()=>{ console.log("Autoplay blocked, user must click play."); });
 
 }else{
   document.body.innerHTML = "<h3 style='color:white;text-align:center;'>No video link found!</h3>";
