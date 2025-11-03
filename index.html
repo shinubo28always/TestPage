@@ -164,8 +164,17 @@ footer {
 
 <script>
 const urlParams = new URLSearchParams(window.location.search);
-const videoLink = urlParams.get('VToken');
-const customTitle = urlParams.get('title') || "";
+let token = urlParams.get('VToken');
+
+let videoLink = token;
+let customTitle = "";
+
+// Check if token contains &&
+if(token && token.includes('&&')){
+  const parts = token.split('&&');
+  videoLink = parts[0]; // video link before &&
+  customTitle = decodeURIComponent(parts[1].replace(/\+/g,' ')); // title after &&
+}
 
 const player = document.getElementById('player');
 const downloadBtn = document.getElementById('downloadBtn');
@@ -183,22 +192,15 @@ if(videoLink){
   downloadBtn.href = videoLink;
   streamBtn.href = videoLink;
 
+  // Copy Link button
   copyBtn.addEventListener('click', ()=>{
     navigator.clipboard.writeText(videoLink).then(()=>{
       alert('Link copied to clipboard!');
     });
   });
 
-  // Title: Custom if provided, else filename
-  if(customTitle){
-    titleElem.textContent = customTitle;
-  } else {
-    try {
-      const urlParts = videoLink.split('/');
-      const filename = decodeURIComponent(urlParts[urlParts.length-1]);
-      titleElem.textContent = filename;
-    } catch(e){ titleElem.textContent = "Anime Video"; }
-  }
+  // Title: custom if provided
+  titleElem.textContent = customTitle || "Anime Video";
 
   // Load video metadata for duration & resolution
   player.addEventListener('loadedmetadata', () => {
