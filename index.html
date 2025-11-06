@@ -145,6 +145,11 @@
       emailInput.value = localStorage.getItem("savedEmail");
       rememberMe.checked = true;
     }
+
+    // 🔥 Check if user is already logged in
+    if (localStorage.getItem("isLoggedIn") === "true") {
+      showGenerator();
+    }
   };
 
   function login() {
@@ -162,8 +167,20 @@
       localStorage.removeItem("savedEmail");
     }
 
+    // Save login state
+    localStorage.setItem("isLoggedIn", "true");
+    showGenerator();
+  }
+
+  function showGenerator() {
     loginContainer.style.display = "none";
     generatorBox.style.display = "flex";
+  }
+
+  function logout() {
+    localStorage.removeItem("isLoggedIn");
+    generatorBox.style.display = "none";
+    loginContainer.style.display = "block";
   }
 
   function forgotPassword() {
@@ -182,11 +199,10 @@
       return;
     }
 
-    // Simple custom code generator
     const code = Math.random().toString(36).substring(2, 8);
-    const customLink = `https://shinubo28always.github.io/redirect/?code=${code}`;
+    const customLink = `https://yourusername.github.io/redirect/?code=${code}`;
     output.style.color = "#90ee90";
-    output.innerHTML = `Generated Link: <br><b>${customLink}</b>`;
+    output.innerHTML = `Generated Link: <br><b>${customLink}</b><br><br><button onclick="logout()" style="padding:8px 14px;border:none;background:#ff4040;color:white;border-radius:6px;cursor:pointer;">Logout</button>`;
   }
 </script>
 
