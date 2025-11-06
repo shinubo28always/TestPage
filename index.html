@@ -116,9 +116,9 @@
 
   <input type="email" id="email" placeholder="Enter your email" required>
   <div style="position: relative; width: 100%;">
-  <input type="password" id="password" placeholder="Enter your password" required style="width: 100%; padding: 10px 40px 10px 12px; border-radius: 8px; border: 1px solid #555; background: #2b2b2b; color: #fff;">
-  <span onclick="togglePassword()" id="eyeIcon" style="position: absolute; right: 12px; top: 9px; cursor: pointer; font-size: 18px;">👁️</span>
-</div>
+    <input type="password" id="password" placeholder="Enter your password" required style="width: 100%; padding: 10px 40px 10px 12px; border-radius: 8px; border: 1px solid #555; background: #2b2b2b; color: #fff;">
+    <span onclick="togglePassword()" id="eyeIcon" style="position: absolute; right: 12px; top: 9px; cursor: pointer; font-size: 18px;">👁️</span>
+  </div>
 
   <div class="remember">
     <label><input type="checkbox" id="rememberMe"> Remember me</label>
@@ -155,19 +155,20 @@
     }
   };
 
- <script>
+  // 👁️ Toggle password visibility
   function togglePassword() {
     const passwordField = document.getElementById("password");
     const eyeIcon = document.getElementById("eyeIcon");
     if (passwordField.type === "password") {
       passwordField.type = "text";
-      eyeIcon.textContent = "🙈"; // change icon when visible
+      eyeIcon.textContent = "🙈";
     } else {
       passwordField.type = "password";
-      eyeIcon.textContent = "👁️"; // revert back
+      eyeIcon.textContent = "👁️";
     }
   }
-</script>
+
+  // ✅ Login function
   function login() {
     const email = emailInput.value.trim();
     const password = passwordInput.value.trim();
@@ -183,7 +184,6 @@
       localStorage.removeItem("savedEmail");
     }
 
-    // Save login state
     localStorage.setItem("isLoggedIn", "true");
     showGenerator();
   }
@@ -206,6 +206,7 @@
     }
   }
 
+  // 🔗 Generate redirect link
   function generateLink() {
     const input = document.getElementById('linkInput').value.trim();
     const output = document.getElementById('output');
@@ -218,7 +219,8 @@
     const code = Math.random().toString(36).substring(2, 8);
     const customLink = `https://yourusername.github.io/redirect/?code=${code}`;
     output.style.color = "#90ee90";
-    output.innerHTML = `Generated Link: <br><b>${customLink}</b><br><br><button onclick="logout()" style="padding:8px 14px;border:none;background:#ff4040;color:white;border-radius:6px;cursor:pointer;">Logout</button>`;
+    output.innerHTML = `Generated Link: <br><b>${customLink}</b><br><br>
+    <button onclick="logout()" style="padding:8px 14px;border:none;background:#ff4040;color:white;border-radius:6px;cursor:pointer;">Logout</button>`;
   }
 </script>
 
