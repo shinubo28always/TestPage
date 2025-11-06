@@ -115,7 +115,10 @@
   <div class="divider">or</div>
 
   <input type="email" id="email" placeholder="Enter your email" required>
-  <input type="password" id="password" placeholder="Enter your password" required>
+  <div style="position: relative; width: 100%;">
+  <input type="password" id="password" placeholder="Enter your password" required style="width: 100%; padding: 10px 40px 10px 12px; border-radius: 8px; border: 1px solid #555; background: #2b2b2b; color: #fff;">
+  <span onclick="togglePassword()" id="eyeIcon" style="position: absolute; right: 12px; top: 9px; cursor: pointer; font-size: 18px;">👁️</span>
+</div>
 
   <div class="remember">
     <label><input type="checkbox" id="rememberMe"> Remember me</label>
