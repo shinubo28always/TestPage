@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Redirect Login</title>
+<title>Smart Redirect Login/Signup</title>
 <style>
   * {
     margin: 0; padding: 0; box-sizing: border-box;
@@ -11,9 +11,10 @@
   }
   body {
     background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    height: 100vh;
+    min-height: 100vh;
     display: flex; justify-content: center; align-items: center;
     color: white;
+    padding: 20px;
   }
   .container {
     background: rgba(255,255,255,0.1);
@@ -27,187 +28,253 @@
   }
   h2 {
     margin-bottom: 20px;
-    font-size: 22px;
+    font-size: 24px;
   }
-  .social-btn {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-  .google { background: #db4437; color: white; }
-  .facebook { background: #1877f2; color: white; }
-  .social-btn:hover { opacity: 0.9; }
-
-  .divider {
-    margin: 20px 0;
-    text-align: center;
-    position: relative;
-  }
-  .divider::before, .divider::after {
-    content: "";
-    position: absolute;
-    top: 50%; width: 40%; height: 1px;
-    background: rgba(255,255,255,0.3);
-  }
-  .divider::before { left: 0; }
-  .divider::after { right: 0; }
-
   input {
     width: 100%;
-    padding: 10px;
-    border: none;
+    padding: 12px;
+    border: 1px solid #555;
     outline: none;
     border-radius: 8px;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
     font-size: 14px;
+    background: #2b2b2b;
+    color: #fff;
   }
-  .remember {
-    display: flex; justify-content: space-between;
-    align-items: center; font-size: 13px;
+  .password-wrapper {
+    position: relative;
+    width: 100%;
     margin-bottom: 15px;
   }
-  .remember input { width: auto; margin-right: 5px; }
-
-  .login-btn {
-    width: 100%; padding: 10px;
+  .password-wrapper input {
+    margin-bottom: 0;
+    padding-right: 45px;
+  }
+  .password-wrapper span {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 20px;
+  }
+  .form-btn {
+    width: 100%; padding: 12px;
     border: none; border-radius: 8px;
     background: #FFD700;
     color: black; font-weight: 700;
     cursor: pointer;
     transition: 0.3s;
+    font-size: 16px;
   }
-  .login-btn:hover { background: #ffcc00; }
-
-  .forgot {
-    color: #00bfff; cursor: pointer; font-size: 13px;
+  .form-btn:hover { background: #ffcc00; }
+  .switch-form {
+      margin-top: 20px;
+      font-size: 14px;
   }
-
+  .switch-form a {
+      color: #00bfff;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 600;
+  }
+  .switch-form a:hover {
+      text-decoration: underline;
+  }
+  .message {
+      margin-bottom: 15px;
+      font-size: 14px;
+      min-height: 20px;
+  }
+  .message.success { color: #90ee90; }
+  .message.error { color: tomato; }
+  
   /* Generator section */
   .generator {
-    display: none;
-    flex-direction: column;
-    align-items: center;
+    display: none; /* Initially hidden */
   }
   .generator input {
     width: 100%;
     margin-bottom: 10px;
   }
   .output {
-    margin-top: 10px;
+    margin-top: 15px;
     font-size: 14px;
     color: #90ee90;
     word-break: break-all;
+    background: rgba(0,0,0,0.2);
+    padding: 10px;
+    border-radius: 8px;
+    min-height: 50px;
+  }
+  .logout-btn {
+    margin-top: 20px;
+    padding: 8px 16px;
+    border: none;
+    background: #ff4040;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
   }
 </style>
 </head>
 <body>
 
+<!-- Login Form -->
 <div class="container" id="loginContainer">
-  <h2>Welcome to Smart Redirect</h2>
-  <button class="social-btn google">Continue with Google</button>
-  <button class="social-btn facebook">Continue with Facebook</button>
-
-  <div class="divider">or</div>
-
-  <input type="email" id="email" placeholder="Enter your email" required>
-  <div style="position: relative; width: 100%;">
-    <input type="password" id="password" placeholder="Enter your password" required style="width: 100%; padding: 10px 40px 10px 12px; border-radius: 8px; border: 1px solid #555; background: #2b2b2b; color: #fff;">
-    <span onclick="togglePassword()" id="eyeIcon" style="position: absolute; right: 12px; top: 9px; cursor: pointer; font-size: 18px;">👁️</span>
+  <h2>Welcome Back!</h2>
+  <div id="loginMessage" class="message"></div>
+  <form id="loginForm" onsubmit="handleLogin(event)">
+    <input type="email" name="email" placeholder="Enter your email" required>
+    <div class="password-wrapper">
+      <input type="password" name="password" placeholder="Enter your password" required>
+      <span onclick="togglePassword(this)">👁️</span>
+    </div>
+    <button type="submit" class="form-btn">Log In</button>
+  </form>
+  <div class="switch-form">
+    Don't have an account? <a onclick="showSignup()">Sign Up</a>
   </div>
-
-  <div class="remember">
-    <label><input type="checkbox" id="rememberMe"> Remember me</label>
-    <span class="forgot" onclick="forgotPassword()">Forgot Password?</span>
-  </div>
-
-  <button class="login-btn" onclick="login()">Log In</button>
 </div>
 
+<!-- Signup Form -->
+<div class="container" id="signupContainer" style="display:none;">
+  <h2>Create Account</h2>
+  <div id="signupMessage" class="message"></div>
+  <form id="signupForm" onsubmit="handleSignup(event)">
+    <input type="email" name="email" placeholder="Enter your email" required>
+    <div class="password-wrapper">
+      <input type="password" name="password" placeholder="Create a password" required>
+      <span onclick="togglePassword(this)">👁️</span>
+    </div>
+    <button type="submit" class="form-btn">Sign Up</button>
+  </form>
+  <div class="switch-form">
+    Already have an account? <a onclick="showLogin()">Log In</a>
+  </div>
+</div>
+
+<!-- Generator Box -->
 <div class="container generator" id="generatorBox">
   <h2>Smart Redirect Generator</h2>
   <input type="text" id="linkInput" placeholder="Enter your original link...">
-  <button class="login-btn" onclick="generateLink()">Generate</button>
+  <button class="form-btn" onclick="generateLink()">Generate</button>
   <div class="output" id="output"></div>
+  <button class="logout-btn" onclick="logout()">Logout</button>
 </div>
 
 <script>
+  // DOM Elements
   const loginContainer = document.getElementById('loginContainer');
+  const signupContainer = document.getElementById('signupContainer');
   const generatorBox = document.getElementById('generatorBox');
-  const emailInput = document.getElementById('email');
-  const passwordInput = document.getElementById('password');
-  const rememberMe = document.getElementById('rememberMe');
+  const loginMessage = document.getElementById('loginMessage');
+  const signupMessage = document.getElementById('signupMessage');
 
-  // Load saved login info
-  window.onload = () => {
-    if (localStorage.getItem("savedEmail")) {
-      emailInput.value = localStorage.getItem("savedEmail");
-      rememberMe.checked = true;
-    }
+  // Utility Functions
+  const showLogin = () => {
+    signupContainer.style.display = 'none';
+    loginContainer.style.display = 'block';
+    generatorBox.style.display = 'none';
+  };
 
-    // 🔥 Check if user is already logged in
-    if (localStorage.getItem("isLoggedIn") === "true") {
-      showGenerator();
+  const showSignup = () => {
+    loginContainer.style.display = 'none';
+    signupContainer.style.display = 'block';
+    generatorBox.style.display = 'none';
+  };
+
+  const showGenerator = () => {
+    loginContainer.style.display = 'none';
+    signupContainer.style.display = 'none';
+    generatorBox.style.display = 'block';
+  };
+
+  const togglePassword = (icon) => {
+    const passwordField = icon.previousElementSibling;
+    if (passwordField.type === "password") {
+      passwordField.type = "text";
+      icon.textContent = "🙈";
+    } else {
+      passwordField.type = "password";
+      icon.textContent = "👁️";
     }
   };
 
-  // 👁️ Toggle password visibility
-  function togglePassword() {
-    const passwordField = document.getElementById("password");
-    const eyeIcon = document.getElementById("eyeIcon");
-    if (passwordField.type === "password") {
-      passwordField.type = "text";
-      eyeIcon.textContent = "🙈";
-    } else {
-      passwordField.type = "password";
-      eyeIcon.textContent = "👁️";
-    }
-  }
+  // -- Authentication Logic --
 
-  // ✅ Login function
-  function login() {
-    const email = emailInput.value.trim();
-    const password = passwordInput.value.trim();
+  // Get users from localStorage
+  const getUsers = () => {
+    const users = localStorage.getItem('smartRedirectUsers');
+    return users ? JSON.parse(users) : {};
+  };
 
-    if (!email || !password) {
-      alert("Please enter both email and password!");
+  // Save users to localStorage
+  const saveUsers = (users) => {
+    localStorage.setItem('smartRedirectUsers', JSON.stringify(users));
+  };
+
+  // Handle Signup
+  const handleSignup = (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const email = form.email.value.trim();
+    const password = form.password.value.trim();
+    
+    const users = getUsers();
+
+    if (users[email]) {
+      signupMessage.textContent = 'Email is already registered!';
+      signupMessage.className = 'message error';
       return;
     }
 
-    if (rememberMe.checked) {
-      localStorage.setItem("savedEmail", email);
+    // Ek real app me, password ko hash karna chahiye
+    // For example: const hashedPassword = await bcrypt.hash(password, 10);
+    users[email] = password; 
+    saveUsers(users);
+
+    signupMessage.textContent = 'Signup successful! Please log in.';
+    signupMessage.className = 'message success';
+    
+    form.reset();
+    setTimeout(() => {
+        showLogin();
+        signupMessage.textContent = '';
+    }, 2000);
+  };
+
+  // Handle Login
+  const handleLogin = (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const email = form.email.value.trim();
+    const password = form.password.value.trim();
+
+    const users = getUsers();
+    const storedPassword = users[email];
+
+    if (storedPassword && storedPassword === password) {
+      // Use sessionStorage to keep user logged in only for the session
+      sessionStorage.setItem('isLoggedIn', 'true');
+      showGenerator();
+      loginMessage.textContent = '';
+      form.reset();
     } else {
-      localStorage.removeItem("savedEmail");
+      loginMessage.textContent = 'Invalid email or password.';
+      loginMessage.className = 'message error';
     }
+  };
 
-    localStorage.setItem("isLoggedIn", "true");
-    showGenerator();
-  }
+  // Logout
+  const logout = () => {
+    sessionStorage.removeItem('isLoggedIn');
+    showLogin();
+  };
 
-  function showGenerator() {
-    loginContainer.style.display = "none";
-    generatorBox.style.display = "flex";
-  }
-
-  function logout() {
-    localStorage.removeItem("isLoggedIn");
-    generatorBox.style.display = "none";
-    loginContainer.style.display = "block";
-  }
-
-  function forgotPassword() {
-    const email = prompt("Enter your registered email to reset password:");
-    if (email) {
-      alert("Password reset link has been sent to " + email);
-    }
-  }
-
-  // 🔗 Generate redirect link
-  function generateLink() {
+  // -- Generator Logic --
+  const generateLink = () => {
     const input = document.getElementById('linkInput').value.trim();
     const output = document.getElementById('output');
     if (!input) {
@@ -215,13 +282,20 @@
       output.style.color = "tomato";
       return;
     }
-
     const code = Math.random().toString(36).substring(2, 8);
-    const customLink = `https://yourusername.github.io/redirect/?code=${code}`;
+    const customLink = `https://your-domain.com/redirect?code=${code}`;
     output.style.color = "#90ee90";
-    output.innerHTML = `Generated Link: <br><b>${customLink}</b><br><br>
-    <button onclick="logout()" style="padding:8px 14px;border:none;background:#ff4040;color:white;border-radius:6px;cursor:pointer;">Logout</button>`;
-  }
+    output.innerHTML = `<b>Generated Link:</b><br>${customLink}`;
+  };
+
+  // -- Initial Check on Page Load --
+  window.onload = () => {
+    if (sessionStorage.getItem('isLoggedIn') === 'true') {
+      showGenerator();
+    } else {
+      showLogin();
+    }
+  };
 </script>
 
 </body>
