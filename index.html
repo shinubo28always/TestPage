@@ -3,122 +3,190 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🔗 Smart Redirect Generator</title>
+<title>Smart Redirect Login</title>
 <style>
-  * { box-sizing: border-box; margin:0; padding:0; font-family: 'Poppins', sans-serif; }
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+  }
   body {
-    background: linear-gradient(135deg, #1f1c2c, #928DAB);
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
     height: 100vh;
-    text-align: center;
+    display: flex; justify-content: center; align-items: center;
+    color: white;
   }
-
-  h1 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-  }
-
-  .box {
+  .container {
     background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
     border-radius: 15px;
-    padding: 30px;
+    padding: 40px 30px;
     width: 90%;
     max-width: 400px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    text-align: center;
   }
-
-  input {
+  h2 {
+    margin-bottom: 20px;
+    font-size: 22px;
+  }
+  .social-btn {
     width: 100%;
-    padding: 12px;
+    padding: 10px;
     border: none;
-    border-radius: 10px;
-    outline: none;
-    margin-top: 10px;
-    font-size: 1rem;
-  }
-
-  button {
-    background: #ff8c00;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 10px;
-    color: white;
-    font-weight: bold;
-    margin-top: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-weight: 600;
     cursor: pointer;
     transition: 0.3s;
   }
-  button:hover { background: #ffa733; }
+  .google { background: #db4437; color: white; }
+  .facebook { background: #1877f2; color: white; }
+  .social-btn:hover { opacity: 0.9; }
 
-  #redirectBox {
-    display: none;
-    margin-top: 20px;
+  .divider {
+    margin: 20px 0;
+    text-align: center;
+    position: relative;
+  }
+  .divider::before, .divider::after {
+    content: "";
+    position: absolute;
+    top: 50%; width: 40%; height: 1px;
+    background: rgba(255,255,255,0.3);
+  }
+  .divider::before { left: 0; }
+  .divider::after { right: 0; }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    font-size: 14px;
+  }
+  .remember {
+    display: flex; justify-content: space-between;
+    align-items: center; font-size: 13px;
+    margin-bottom: 15px;
+  }
+  .remember input { width: auto; margin-right: 5px; }
+
+  .login-btn {
+    width: 100%; padding: 10px;
+    border: none; border-radius: 8px;
+    background: #FFD700;
+    color: black; font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  .login-btn:hover { background: #ffcc00; }
+
+  .forgot {
+    color: #00bfff; cursor: pointer; font-size: 13px;
   }
 
-  #generatedLink {
+  /* Generator section */
+  .generator {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+  }
+  .generator input {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .output {
     margin-top: 10px;
-    font-size: 0.9rem;
-    background: rgba(255,255,255,0.2);
-    padding: 8px;
-    border-radius: 8px;
+    font-size: 14px;
+    color: #90ee90;
     word-break: break-all;
   }
 </style>
 </head>
 <body>
 
-<h1>🔗 Smart Redirect Generator</h1>
+<div class="container" id="loginContainer">
+  <h2>Welcome to Smart Redirect</h2>
+  <button class="social-btn google">Continue with Google</button>
+  <button class="social-btn facebook">Continue with Facebook</button>
 
-<div class="box">
-  <div id="loginBox">
-    <p>Please login to continue:</p>
-    <input type="text" id="username" placeholder="Enter username">
-    <button onclick="login()">Login</button>
+  <div class="divider">or</div>
+
+  <input type="email" id="email" placeholder="Enter your email" required>
+  <input type="password" id="password" placeholder="Enter your password" required>
+
+  <div class="remember">
+    <label><input type="checkbox" id="rememberMe"> Remember me</label>
+    <span class="forgot" onclick="forgotPassword()">Forgot Password?</span>
   </div>
 
-  <div id="redirectBox">
-    <p>Welcome, <span id="userName"></span> 👋</p>
-    <input type="url" id="userLink" placeholder="Enter your link..." />
-    <button onclick="generateLink()">Continue</button>
+  <button class="login-btn" onclick="login()">Log In</button>
+</div>
 
-    <div id="generatedLink"></div>
-  </div>
+<div class="container generator" id="generatorBox">
+  <h2>Smart Redirect Generator</h2>
+  <input type="text" id="linkInput" placeholder="Enter your original link...">
+  <button class="login-btn" onclick="generateLink()">Generate</button>
+  <div class="output" id="output"></div>
 </div>
 
 <script>
-  const savedUser = localStorage.getItem("smartUser");
+  const loginContainer = document.getElementById('loginContainer');
+  const generatorBox = document.getElementById('generatorBox');
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+  const rememberMe = document.getElementById('rememberMe');
 
-  if (savedUser) {
-    document.getElementById("loginBox").style.display = "none";
-    document.getElementById("redirectBox").style.display = "block";
-    document.getElementById("userName").innerText = savedUser;
-  }
+  // Load saved login info
+  window.onload = () => {
+    if (localStorage.getItem("savedEmail")) {
+      emailInput.value = localStorage.getItem("savedEmail");
+      rememberMe.checked = true;
+    }
+  };
 
   function login() {
-    const username = document.getElementById("username").value.trim();
-    if (!username) return alert("Please enter your name!");
-    localStorage.setItem("smartUser", username);
-    document.getElementById("loginBox").style.display = "none";
-    document.getElementById("redirectBox").style.display = "block";
-    document.getElementById("userName").innerText = username;
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    if (!email || !password) {
+      alert("Please enter both email and password!");
+      return;
+    }
+
+    if (rememberMe.checked) {
+      localStorage.setItem("savedEmail", email);
+    } else {
+      localStorage.removeItem("savedEmail");
+    }
+
+    loginContainer.style.display = "none";
+    generatorBox.style.display = "flex";
+  }
+
+  function forgotPassword() {
+    const email = prompt("Enter your registered email to reset password:");
+    if (email) {
+      alert("Password reset link has been sent to " + email);
+    }
   }
 
   function generateLink() {
-    const userLink = document.getElementById("userLink").value.trim();
-    if (!userLink) return alert("Please enter a valid link!");
+    const input = document.getElementById('linkInput').value.trim();
+    const output = document.getElementById('output');
+    if (!input) {
+      output.textContent = "Please enter a valid link!";
+      output.style.color = "tomato";
+      return;
+    }
 
-    // generate simple random code
+    // Simple custom code generator
     const code = Math.random().toString(36).substring(2, 8);
-    localStorage.setItem(code, userLink);
-
-    const redirectURL = `${window.location.origin}/go.html?code=${code}`;
-    document.getElementById("generatedLink").innerHTML = 
-      `Your redirect link:<br><a href="${redirectURL}" target="_blank">${redirectURL}</a>`;
+    const customLink = `https://shinubo28always.github.io/redirect/?code=${code}`;
+    output.style.color = "#90ee90";
+    output.innerHTML = `Generated Link: <br><b>${customLink}</b>`;
   }
 </script>
 
